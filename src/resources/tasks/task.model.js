@@ -19,7 +19,7 @@ class Task {
     this.columnId = columnId;
   }
 
-  static toResponse({ id, title, order, description, userId, boardId, columnId }) {    
+  static toResponse({ id, title, order, description, userId, boardId, columnId }) {
     return { id, title, order, description, userId, boardId, columnId };
   }
 }

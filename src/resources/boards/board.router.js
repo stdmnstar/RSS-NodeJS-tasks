@@ -3,13 +3,18 @@ const Board = require('./board.model');
 const boardService = require('./board.service');
 
 router.route('/').get(async (req, res) => {
-  const boards = await boardService.getAll();
-  res.json(boards.map(Board.toResponse));
+  try {
+    const boards = await boardService.getAll();
+    res.json(boards.map(Board.toResponse));
+  } catch ({ message }) {
+    res.status(404).send(message);
+  }
 });
 
 router.route('/:boardId').get(async (req, res) => {
   try {
-    const board = await boardService.getById(req.params.boardId);
+    const { boardId } = req.params;
+    const board = await boardService.getById(boardId);
     res.json(Board.toResponse(board));
   } catch ({ message }) {
     res.status(404).send(message);
@@ -18,12 +23,7 @@ router.route('/:boardId').get(async (req, res) => {
 
 router.route('/').post(async (req, res) => {
   try {
-    const user = await boardService.create(
-      new Board({
-        title: req.body.title,
-        columns: req.body.columns
-      })
-    );
+    const user = await boardService.create(new Board({ ...req.body }));
     res.status(201).json(Board.toResponse(user));
   } catch ({ message }) {
     res.status(404).send(message);
@@ -32,7 +32,8 @@ router.route('/').post(async (req, res) => {
 
 router.route('/:boardId').put(async (req, res) => {
   try {
-    const user = await boardService.update(req.params.boardId, req.body);
+    const { boardId } = req.params;
+    const user = await boardService.update(boardId, req.body);
     res.json(Board.toResponse(user));
   } catch ({ message }) {
     res.status(404).send(message);
@@ -40,9 +41,8 @@ router.route('/:boardId').put(async (req, res) => {
 });
 
 router.route('/:boardId').delete(async (req, res) => {
-  const { boardId } = req.params;
-
   try {
+    const { boardId } = req.params;
     await boardService.remove(boardId);
     res.status(204).json(`Board is deleted with id = ${boardId}`);
   } catch ({ message }) {

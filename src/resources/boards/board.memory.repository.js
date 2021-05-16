@@ -21,10 +21,10 @@ const update = async (id, newBoard) => {
 const create = async board => DB.createBoard(board);
 
 const remove = async id => {
-  const board = DB.getBoardById(id); 
+  const board = DB.getBoardById(id);
   if (!board) {
     throw new Error(`Board id=${id} was not found`);
-  }  
+  }
   DB.deleteBoard(id);
 };
 

@@ -1,6 +1,5 @@
 let inMemoryUsers = [];
 let inMemoryBoards = [];
-
 let inMemoryTasks = [];
 
 const getAllUsers = async () => inMemoryUsers.slice();
@@ -14,7 +13,7 @@ const getTaskByIdForBoardId = async (boardId, id) => {
   const task = tasks.filter((el) => el.id === id)[0];
   return task;
 };
-  
+
 const createUser = async user => {
   inMemoryUsers.push(user);
   return user;
@@ -53,34 +52,31 @@ const updateBoard = async (id, newBoard) => {
 const updateTask = async (id, taskData) => {
   const index = inMemoryTasks.findIndex((el) => el.id === id);
   const updatedTask = { id, ...taskData };
-
   inMemoryTasks[index] = updatedTask;
-
   return updatedTask;
 };
 
-const deleteUser = async id => {
-  // TODO await tasksRepo.unassignUserById(userId);
-  // DB_TASKS = DB_TASKS.map(task =>
-  //   task.userId === userId ? { ...task, userId: null } : task
-  // );
+const unassignTasksByUserId = id => {
+  inMemoryTasks = inMemoryTasks.map(task => task.userId === id ? { ...task, userId: null } : task);
+}
 
+const deleteUser = async id => {
+  unassignTasksByUserId(id);
   inMemoryUsers = inMemoryUsers.filter((el) => el.id !== id);
 };
 
-const deleteBoard = async id => {
-  // TODO await tasksRepo.deleteAllByBoardId(id);
-  //  DB.tasks = DB.tasks.filter(({ boardId }) => boardId !== id);
-  //   
-  // );
+const deleteTasksByBoardId = id => {
+  inMemoryTasks = inMemoryTasks.filter(el => el.boardId !== id);
+}
 
+const deleteBoard = async id => {
+  deleteTasksByBoardId(id);
   inMemoryBoards = inMemoryBoards.filter((el) => el.id !== id);
 };
 
 const deleteTask = async id => {
   inMemoryTasks = inMemoryTasks.filter((el) => el.id !== id);
 };
-
 
 module.exports = {
   getAllUsers,

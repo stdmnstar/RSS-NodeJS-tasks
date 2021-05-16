@@ -21,10 +21,10 @@ const update = async (id, newUser) => {
 const create = async user => DB.createUser(user);
 
 const remove = async id => {
-  const user = DB.getUserById(id); 
+  const user = DB.getUserById(id);
   if (!user) {
     throw new Error(`User id=${id} was not found`);
-  }  
+  }
   DB.deleteUser(id);
 };
 

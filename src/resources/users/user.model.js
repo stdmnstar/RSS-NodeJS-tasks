@@ -13,7 +13,7 @@ class User {
     this.password = password;
   }
 
-  static toResponse({ id, name, login }) {   
+  static toResponse({ id, name, login }) {
     return { id, name, login };
   }
 }

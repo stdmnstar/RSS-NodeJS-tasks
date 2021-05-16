@@ -23,15 +23,14 @@ const create = async (boardId, task) => {
   if (!board) {
     throw new Error(`Board id=${boardId} was not found`);
   }
-
   return DB.createTask(task);
 }
 
 const remove = async (boardId, id) => {
-  const board = DB.getBoardById(id); 
+  const board = DB.getBoardById(id);
   if (!board) {
     throw new Error(`Board id=${id} was not found`);
-  }  
+  }
   DB.deleteTask(id);
 };
 

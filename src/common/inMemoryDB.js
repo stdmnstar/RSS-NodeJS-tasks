@@ -56,21 +56,21 @@ const updateTask = async (id, taskData) => {
   return updatedTask;
 };
 
-const unassignTasksByUserId = id => {
+const unassignTasksByUserId = async id => {
   inMemoryTasks = inMemoryTasks.map(task => task.userId === id ? { ...task, userId: null } : task);
 }
 
 const deleteUser = async id => {
-  unassignTasksByUserId(id);
+  await unassignTasksByUserId(id);
   inMemoryUsers = inMemoryUsers.filter((el) => el.id !== id);
 };
 
-const deleteTasksByBoardId = id => {
+const deleteTasksByBoardId = async id => {
   inMemoryTasks = inMemoryTasks.filter(el => el.boardId !== id);
 }
 
 const deleteBoard = async id => {
-  deleteTasksByBoardId(id);
+  await deleteTasksByBoardId(id);
   inMemoryBoards = inMemoryBoards.filter((el) => el.id !== id);
 };
 

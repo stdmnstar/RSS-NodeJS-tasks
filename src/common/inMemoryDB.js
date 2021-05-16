@@ -1,49 +1,62 @@
-const Board = require('../resources/boards/board.model');
+let inMemoryUsers = [];
+let inMemoryBoards = [];
 
-let DB_USERS = [
-  // new User(), new User(), new User()
-];
-let DB_BOARDS = [
-  new Board(), new Board(), new Board()
-];
+let inMemoryTasks = [];
 
-// const DB_TASKS = [];
+const getAllUsers = async () => inMemoryUsers.slice();
+const getAllBoards = async () => inMemoryBoards.slice();
+const getAlltasksForBoardId = async id => inMemoryTasks.filter(({ boardId }) => boardId === id);;
 
-const getAllUsers = async () => DB_USERS.slice();
-const getAllBoards = async () => DB_BOARDS.slice();
-
-const getUserById = async id => DB_USERS.filter(el => el.id === id)[0];
-const getBoardById = async id =>  DB_BOARDS.filter(el => el.id === id)[0];
-  // el => el.id === boardId)[0];
-
+const getUserById = async id => inMemoryUsers.filter(el => el.id === id)[0];
+const getBoardById = async id => inMemoryBoards.filter(el => el.id === id)[0];
+const getTaskByIdForBoardId = async (boardId, id) => {
+  const tasks = await getAlltasksForBoardId(boardId);
+  const task = tasks.filter((el) => el.id === id)[0];
+  return task;
+};
+  
 const createUser = async user => {
-  DB_USERS.push(user);
+  inMemoryUsers.push(user);
   return user;
 };
 
 const createBoard = async board => {
-  DB_BOARDS.push(board);
+  inMemoryBoards.push(board);
   return board;
 };
 
+const createTask = async task => {
+  inMemoryTasks.push(task);
+  return task;
+};
+
 const updateUser = async (id, newUser) => {
-  const index = DB_USERS.findIndex((el) => el.id === id);
+  const index = inMemoryUsers.findIndex((el) => el.id === id);
   const updatedUser = { id, ...newUser };
   if (index !== -1) {
-    DB_USERS[index] = updatedUser;
+    inMemoryUsers[index] = updatedUser;
     return updatedUser
   }
   return undefined;
 };
 
 const updateBoard = async (id, newBoard) => {
-  const index = DB_BOARDS.findIndex((el) => el.id === id);
+  const index = inMemoryBoards.findIndex((el) => el.id === id);
   const updatedBoard = { id, ...newBoard };
   if (index !== -1) {
-    DB_BOARDS[index] = updatedBoard;
+    inMemoryBoards[index] = updatedBoard;
     return updatedBoard
   }
   return undefined;
+};
+
+const updateTask = async (id, taskData) => {
+  const index = inMemoryTasks.findIndex((el) => el.id === id);
+  const updatedTask = { id, ...taskData };
+
+  inMemoryTasks[index] = updatedTask;
+
+  return updatedTask;
 };
 
 const deleteUser = async id => {
@@ -52,7 +65,7 @@ const deleteUser = async id => {
   //   task.userId === userId ? { ...task, userId: null } : task
   // );
 
-  DB_USERS = DB_USERS.filter((el) => el.id !== id);
+  inMemoryUsers = inMemoryUsers.filter((el) => el.id !== id);
 };
 
 const deleteBoard = async id => {
@@ -61,19 +74,28 @@ const deleteBoard = async id => {
   //   
   // );
 
-  DB_BOARDS = DB_BOARDS.filter((el) => el.id !== id);
+  inMemoryBoards = inMemoryBoards.filter((el) => el.id !== id);
+};
+
+const deleteTask = async id => {
+  inMemoryTasks = inMemoryTasks.filter((el) => el.id !== id);
 };
 
 
 module.exports = {
   getAllUsers,
   getAllBoards,
+  getAlltasksForBoardId,
   getUserById,
   getBoardById,
+  getTaskByIdForBoardId,
   createUser,
   createBoard,
+  createTask,
   updateUser,
   updateBoard,
+  updateTask,
   deleteUser,
-  deleteBoard
+  deleteBoard,
+  deleteTask
 };

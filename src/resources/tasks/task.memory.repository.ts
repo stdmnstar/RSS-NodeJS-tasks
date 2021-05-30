@@ -12,8 +12,8 @@ const getById = async (boardId: string, id: string) => {
   return task;
 };
 
-const update = async (_boardId: string, id: string, newTask: Task) => {
-  const task = DB.updateTask(id, newTask);
+const update = async (boardId: string, id: string, newTask: Task) => {
+  const task = DB.updateTask(boardId, id, newTask);
   if (!task) {
     throw new Error(`Task id=${id} was not found`);
   }

@@ -12,7 +12,7 @@ const getAllBoards = async () => inMemoryBoards.slice();
 
 const getAlltasksForBoardId = async (id:string) => inMemoryTasks.filter((task: Task ) => task.boardId === id);
 
-const getUserById = async id => {
+const getUserById = async (id: string) => {
   const user = inMemoryUsers.filter(el => el.id === id)[0];
   if (!user) {
     return null;
@@ -20,7 +20,7 @@ const getUserById = async id => {
   return user;
 }
 
-const getBoardById = async id => {
+const getBoardById = async (id: string) => {
   const board = inMemoryBoards.filter(el => el.id === id)[0];
   if (!board) {
     return null;
@@ -28,7 +28,7 @@ const getBoardById = async id => {
   return board;
 }
 
-const getTaskByIdForBoardId = async (boardId, id) => {
+const getTaskByIdForBoardId = async (boardId: string, id: string) => {
   const tasks = await getAlltasksForBoardId(boardId);
   const task = tasks.filter((el) => el.id === id)[0];
   if (!task) {
@@ -37,67 +37,75 @@ const getTaskByIdForBoardId = async (boardId, id) => {
   return task;
 };
 
-const createUser = async user => {
+const createUser = async (user: User) => {
   inMemoryUsers.push(user);
   return user;
 };
 
-const createBoard = async board => {
+const createBoard = async (board: Board) => {
   inMemoryBoards.push(board);
   return board;
 };
 
-const createTask = async task => {
+const createTask = async (task: Task) => {
   inMemoryTasks.push(task);
   return task;
 };
 
-const updateUser = async (id, newUser) => {
-  const index = inMemoryUsers.findIndex((el) => el.id === id);
-  const updatedUser = { id, ...newUser };
-  if (index !== -1) {
-    inMemoryUsers[index] = updatedUser;
-  }
+const updateUser = async (id: string, newUser: User) => {
+  
+  inMemoryUsers =  inMemoryUsers.map((el) => {
+    if (el.id === id ) {
+      return {...el, ...newUser}
+    }
+    return el
+  })
   return getUserById(id);
 };
 
-const updateBoard = async (id, newBoard) => {
-  const index = inMemoryBoards.findIndex((el) => el.id === id);
-  const updatedBoard = { id, ...newBoard };
-  if (index !== -1) {
-    inMemoryBoards[index] = updatedBoard;
-  }
+const updateBoard = async (id: string, newBoard: Board) => {
+  
+  inMemoryBoards =  inMemoryBoards.map((el) => {
+    if (el.id === id ) {
+      return {...el, ...newBoard}
+    }
+    return el
+  })
+
   return getBoardById(id);
 };
 
-const updateTask = async (id, newTask) => {
-  const index = inMemoryTasks.findIndex((el) => el.id === id);
-  const updatedTask = { id, ...newTask };
-  if (index !== -1) {
-    inMemoryTasks[index] = updatedTask;
-  }
-  return updatedTask;
+const updateTask = async (boardId: string, id: string, newTask: Task) => {
+  
+  inMemoryTasks =  inMemoryTasks.map((el) => {
+    if (el.id === id ) {
+      return {...el, ...newTask}
+    }
+    return el
+  })
+
+  return getTaskByIdForBoardId(boardId, id);
 };
 
-const unassignTasksByUserId = async id => {
+const unassignTasksByUserId = async (id: string) => {
   inMemoryTasks = inMemoryTasks.map(task => task.userId === id ? { ...task, userId: null } : task);
 }
 
-const deleteUser = async id => {
+const deleteUser = async (id: string) => {
   await unassignTasksByUserId(id);
   inMemoryUsers = inMemoryUsers.filter((el) => el.id !== id);
 };
 
-const deleteTasksByBoardId = async id => {
+const deleteTasksByBoardId = async (id: string) => {
   inMemoryTasks = inMemoryTasks.filter(el => el.boardId !== id);
 }
 
-const deleteBoard = async id => {
+const deleteBoard = async (id: string) => {
   await deleteTasksByBoardId(id);
   inMemoryBoards = inMemoryBoards.filter((el) => el.id !== id);
 };
 
-const deleteTask = async id => {
+const deleteTask = async (id: string) => {
   inMemoryTasks = inMemoryTasks.filter((el) => el.id !== id);
 };
 

@@ -1,8 +1,9 @@
-const DB = require('../../common/inMemoryDB');
+import DB from '../../common/inMemoryDB';
+import User from './user.model';
 
 const getAll = async () => DB.getAllUsers();
 
-const getById = async id => {
+const getById = async (id: string) => {
   const user = DB.getUserById(id);
   if (!user) {
     throw new Error(`User id=${id} was not found`);
@@ -10,7 +11,7 @@ const getById = async id => {
   return user;
 };
 
-const update = async (id, newUser) => {
+const update = async (id: string, newUser: User) => {
   const user = DB.updateUser(id, newUser);
   if (!user) {
     throw new Error(`User id=${id} was not found`);
@@ -18,9 +19,9 @@ const update = async (id, newUser) => {
   return user;
 };
 
-const create = async user => DB.createUser(user);
+const create = async (user: User) => DB.createUser(user);
 
-const remove = async id => {
+const remove = async (id: string) => {
   const user = DB.getUserById(id);
   if (!user) {
     throw new Error(`User id=${id} was not found`);
@@ -28,7 +29,7 @@ const remove = async id => {
   DB.deleteUser(id);
 };
 
-module.exports = {
+export default {
   getAll,
   getById,
   create,

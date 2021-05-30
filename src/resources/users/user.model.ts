@@ -1,7 +1,21 @@
-const { v4: uuid4 } = require('uuid');
+import {v4 as uuid4} from 'uuid';
 
-class User {
+interface IUser {
+  id: string;
+  name: string;
+  login: string;
+  password: string;
+}
+class User implements IUser {
   
+  id: string;
+
+  name: string;
+
+  login: string;
+
+  password: string;
+
   constructor({
     id = uuid4(),
     name = 'USER',
@@ -14,7 +28,9 @@ class User {
     this.password = password;
   }
 
-  static toResponse({ id, name, login }) {
+  static toResponse(user: User | null) {
+    if (!user) return null;
+    const { id, name, login } = user;
     return { id, name, login };
   }
 }

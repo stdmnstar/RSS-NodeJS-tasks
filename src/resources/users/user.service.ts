@@ -1,16 +1,17 @@
-const usersRepo = require('./user.memory.repository');
+import usersRepo from './user.memory.repository';
+import User from './user.model'
 
 const getAll = () => usersRepo.getAll();
 
-const getById = id => usersRepo.getById(id);
+const getById = (id: string) => usersRepo.getById(id);
 
-const create = user => usersRepo.create(user);
+const create = (user: User) => usersRepo.create(user);
 
-const update = (id, newUser) => usersRepo.update(id, newUser);
+const update = (id: string, newUser: User) => usersRepo.update(id, newUser);
 
-const remove = id => usersRepo.remove(id);
+const remove = (id: string) => usersRepo.remove(id);
 
-module.exports = {
+export default {
     getAll,
     getById,
     create,

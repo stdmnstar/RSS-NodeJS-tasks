@@ -1,6 +1,18 @@
-const { v4: uuid4 } = require('uuid');
+import {v4 as uuid4} from 'uuid';
 
-class Column {
+interface IColumn {
+  id: string;
+  title: string;
+  order: number;
+ 
+}
+class Column implements IColumn{
+
+  id: string;
+
+  title: string;
+
+  order: number;
   
   constructor({ id = uuid4(), title = 'New title', order = 0 } = {}) {
     this.id = id;
@@ -8,8 +20,8 @@ class Column {
     this.order = order;
   }
 
-  static toResponse({ id, title, order }) {    
-    return { id, title, order };
+  static toResponse(column: Column) {    
+    return column;
   }
 }
 

@@ -1,12 +1,16 @@
-let inMemoryUsers = [];
-let inMemoryBoards = [];
-let inMemoryTasks = [];
+import User from "../resources/users/user.model";
+import Board from "../resources/boards/board.model";
+import Task from "../resources/tasks/task.model";
+
+let inMemoryUsers: User[] = [];
+let inMemoryBoards: Board[] = [];
+let inMemoryTasks: Task[] = [];
 
 const getAllUsers = async () => inMemoryUsers.slice();
 
 const getAllBoards = async () => inMemoryBoards.slice();
 
-const getAlltasksForBoardId = async id => inMemoryTasks.filter(({ boardId }) => boardId === id);
+const getAlltasksForBoardId = async (id:string) => inMemoryTasks.filter((task: Task ) => task.boardId === id);
 
 const getUserById = async id => {
   const user = inMemoryUsers.filter(el => el.id === id)[0];

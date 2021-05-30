@@ -19,7 +19,7 @@ class Board implements IBoard {
     this.columns = [...columns];
   }
 
-  static toResponse(board: Board) {
+  static toResponse(board: Board | null) {
     return board;
   }
 }

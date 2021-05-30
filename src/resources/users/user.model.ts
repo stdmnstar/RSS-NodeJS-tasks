@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid4 } from 'uuid';
 
 export interface IUser {
   id: string;
@@ -18,7 +18,7 @@ class User implements IUser {
   password: string;
 
   constructor({
-    id = uuid(),
+    id = uuid4(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd'

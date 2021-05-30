@@ -1,21 +1,21 @@
 import DB from '../../common/inMemoryDB';
 import Task from './task.model';
 
-const getAll = async () => {
-  const allTasks = await DB.Tasks.map(Task.toResponse);
-  return allTasks;
-}
+const getAll = async () => DB.Tasks.map(Task.toResponse);
 
 const getById = async (id: string) => {
-  const task = await DB.Tasks.find((el: Task) => el.id === id);;
-  if (!task) throw new Error('Task not found');
+  const task = await DB.Tasks.filter(el => el.id === id)[0];
+
+  if (!task) throw new Error(`Task id=${id} was not found`);
+
   return Task.toResponse(task);
 };
 
 const create = async (data: Task) => {
-  await DB.Tasks.push(data)
+  await DB.Tasks.push(data);
+
   return Task.toResponse(data);
-}
+};
 
 const update = async (id: string, data: object) => {
   DB.Tasks = await DB.Tasks.map((el: Task) => {
@@ -24,18 +24,26 @@ const update = async (id: string, data: object) => {
     }
     return el
   })
-  const updatedTask = await getById(id);
-  return updatedTask;
-}
+
+  return getById(id);
+};
 
 const remove = async (id: string) => {
-  const removeTask = await { ...getById(id) };
+  const removeTask = await getById(id);
+
   await DB.Tasks.forEach((el: Task, i) => {
     if (el.id === id) {
       DB.Tasks.splice(i, 1);
     }
   })
-  return removeTask;
-}
 
-export default { getAll, getById, create, update, remove };
+  return removeTask;
+};
+
+export default {
+  getAll,
+  getById,
+  create,
+  update,
+  remove
+};

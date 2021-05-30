@@ -6,7 +6,7 @@ interface IDB {
   Users: IUser[];
   Boards: IBoard[];
   Tasks: ITask[];
-}
+};
 
 const DB: IDB = {
   Users: [],
@@ -14,4 +14,4 @@ const DB: IDB = {
   Tasks: [],
 };
 
-export default DB
+export default DB;

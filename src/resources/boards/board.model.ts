@@ -4,7 +4,7 @@ export interface IBoard {
   id: string;
   title: string;
   columns: object[];
-}
+};
 
 class Board implements IBoard {
 
@@ -28,6 +28,6 @@ class Board implements IBoard {
   static toResponse(board: Board) {
     return board;
   }
-}
+};
 
 export default Board;

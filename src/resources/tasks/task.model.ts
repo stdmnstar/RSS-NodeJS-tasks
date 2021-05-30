@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid4 } from 'uuid';
 
 export interface ITask {
   id: string;
@@ -8,7 +8,7 @@ export interface ITask {
   userId: string | null;
   boardId: string | null | undefined;
   columnId: string;
-}
+};
 
 class Task implements ITask {
   id: string;
@@ -21,13 +21,13 @@ class Task implements ITask {
 
   userId: string | null;
 
-  boardId: string | undefined | null;
+  boardId: string | null | undefined;
 
   columnId: string;
 
   constructor(
     {
-      id = uuid(),
+      id = uuid4(),
       title = 'Task',
       order = 0,
       description = 'description',
@@ -35,7 +35,7 @@ class Task implements ITask {
       boardId = `boardId`,
       columnId = `columnId`
     } = {} as ITask,
-    boardIdFromParams?: string | undefined | null
+    boardIdFromParams?: string | null | undefined
   ) {
 
     this.id = id;
@@ -56,6 +56,6 @@ class Task implements ITask {
   static toResponse(task: Task) {
     return task;
   }
-}
+};
 
 export default Task;

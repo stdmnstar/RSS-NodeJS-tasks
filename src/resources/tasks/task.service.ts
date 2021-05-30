@@ -7,7 +7,7 @@ const getById = (id: string) => taskRepo.getById(id);
 
 const create = (data: Task, boardIdFromParams: string) => taskRepo.create(new Task(data, boardIdFromParams));
 
-const update = (id: string, data: Task) => taskRepo.update(id, new Task(data, undefined));
+const update = (id: string, data: Task) => taskRepo.update(id, new Task(data));
 
 const remove = (id: string) => taskRepo.remove(id);
 

@@ -23,6 +23,6 @@ class Column implements IColumn {
   static toResponse(column: Column) {
     return column;
   }
-}
+};
 
 module.exports = Column;

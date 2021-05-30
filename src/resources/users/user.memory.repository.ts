@@ -1,38 +1,46 @@
 import DB from '../../common/inMemoryDB';
 import User from './user.model';
 
-const getAll = async () => DB.getAllUsers();
+const getAll = async () => {
+  const allUsers = await DB.Users.map(User.toResponse);
+  return allUsers;
+}
 
 const getById = async (id: string) => {
-  const user = DB.getUserById(id);
-  if (!user) {
-    throw new Error(`User id=${id} was not found`);
-  }
-  return user;
+  const user = await DB.Users.find((el: User) => el.id === id);
+  if (!user) throw new Error('User not found');
+  return User.toResponse(user);
 };
 
-const update = async (id: string, newUser: User) => {
-  const user = DB.updateUser(id, newUser);
-  if (!user) {
-    throw new Error(`User id=${id} was not found`);
-  }
-  return user;
-};
+const create = async (data: User) => {
+  await DB.Users.push(data)
+  return User.toResponse(data);
+}
 
-const create = async (user: User) => DB.createUser(user);
+const update = async (id: string, data: object) => {
+  DB.Users = await DB.Users.map((el: User) => {
+    if (el.id === id) {
+      return { ...el, ...data }
+    }
+    return el
+  })
+  const updatedUser = await getById(id);
+  return updatedUser;
+}
 
 const remove = async (id: string) => {
-  const user = DB.getUserById(id);
-  if (!user) {
-    throw new Error(`User id=${id} was not found`);
-  }
-  DB.deleteUser(id);
-};
 
-export default {
-  getAll,
-  getById,
-  create,
-  update,
-  remove
-};
+  DB.Tasks = await DB.Tasks.map((el) =>
+    el.userId === id ? { ...el, userId: null } : el
+  );
+
+  const removeUser = await { ...getById(id) };
+  await DB.Users.forEach((el: User, i) => {
+    if (el.id === id) {
+      DB.Users.splice(i, 1);
+    }
+  })
+  return removeUser;
+}
+
+export default { getAll, getById, create, update, remove };

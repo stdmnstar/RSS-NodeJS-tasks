@@ -3,18 +3,13 @@ import User from './user.model'
 
 const getAll = () => usersRepo.getAll();
 
+
 const getById = (id: string) => usersRepo.getById(id);
 
-const create = (user: User) => usersRepo.create(user);
+const create = (data: User) => usersRepo.create(new User(data));
 
-const update = (id: string, newUser: User) => usersRepo.update(id, newUser);
+const update = (id: string, data: User) => usersRepo.update(id, new User(data));
 
 const remove = (id: string) => usersRepo.remove(id);
 
-export default {
-    getAll,
-    getById,
-    create,
-    update,
-    remove
-};
+export default { getAll, getById, create, update, remove };

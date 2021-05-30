@@ -1,20 +1,14 @@
-import boardsRepo from './board.memory.repository';
+import boardRepo from './board.memory.repository';
 import Board from './board.model';
 
-const getAll = () => boardsRepo.getAll();
+const getAll = () => boardRepo.getAll();
 
-const getById = (id: string) => boardsRepo.getById(id);
+const getById = (id: string) => boardRepo.getById(id);
 
-const create = (board: Board) => boardsRepo.create(board);
+const createBoard = (data: Board) => boardRepo.create(new Board(data));
 
-const update = (id: string, newBoard: Board) => boardsRepo.update(id, newBoard);
+const update = (id: string, data: Board) => boardRepo.update(id, new Board(data));
 
-const remove = (id:string) => boardsRepo.remove(id);
+const remove = (id: string) => boardRepo.remove(id);
 
-export default {
-    getAll,
-    getById,
-    create,
-    update,
-    remove
-};
+export default { getAll, getById, createBoard, update, remove };

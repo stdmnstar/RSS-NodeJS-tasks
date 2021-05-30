@@ -1,38 +1,42 @@
 import DB from '../../common/inMemoryDB';
 import Board from './board.model';
 
-const getAll = async () => DB.getAllBoards();
+const getAll = async () => {
+  const allBoards = await DB.Boards.map(Board.toResponse);
+  return allBoards;
+}
 
 const getById = async (id: string) => {
-  const board = DB.getBoardById(id);
-  if (!board) {
-    throw new Error(`Board id=${id} was not found`);
-  }
-  return board;
+  const board = await DB.Boards.filter(el => el.id === id)[0];
+  if (!board) throw new Error(`Board id=${id} was not found`);
+  return Board.toResponse(board);
 };
 
-const update = async (id: string, newBoard: Board) => {
-  const board = DB.updateBoard(id, newBoard);
-  if (!board) {
-    throw new Error(`Board id=${id} was not found`);
-  }
-  return board;
-};
+const create = async (data: Board) => {
+  await DB.Boards.push(data)
+  return Board.toResponse(data);
+}
 
-const create = async (board: Board) => DB.createBoard(board);
+const update = async (id: string, data: object) => {
+  DB.Boards = await DB.Boards.map((el: Board) => {
+    if (el.id === id) {
+      return { ...el, ...data }
+    }
+    return el;
+  })
+  const updatedBoard = await getById(id);
+  return updatedBoard;
+}
 
 const remove = async (id: string) => {
-  const board = DB.getBoardById(id);
-  if (!board) {
-    throw new Error(`Board id=${id} was not found`);
-  }
-  DB.deleteBoard(id);
-};
+  DB.Tasks = await DB.Tasks.filter((task) => task.boardId !== id);
 
-export default {
-  getAll,
-  getById,
-  create,
-  update,
-  remove
-};
+  const removeBoard = await { ...getById(id) };
+  await DB.Boards.forEach((el: Board, i) => {
+    if (el.id === id) {
+      DB.Boards.splice(i, 1);
+    }
+  })
+  return removeBoard;
+}
+export default { getAll, getById, create, update, remove };

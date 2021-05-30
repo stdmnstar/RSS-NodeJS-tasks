@@ -1,20 +1,14 @@
-import tasksRepo from './task.memory.repository';
+import taskRepo from './task.memory.repository';
 import Task from './task.model';
 
-const getAll = (boardId: string) => tasksRepo.getAll(boardId);
+const getAll = () => taskRepo.getAll();
 
-const getById = (boardId: string, id: string) => tasksRepo.getById(boardId, id);
+const getById = (id: string) => taskRepo.getById(id);
 
-const create = (boardId: string, task: Task) => tasksRepo.create(boardId, task);
+const create = (data: Task, boardIdFromParams: string) => taskRepo.create(new Task(data, boardIdFromParams));
 
-const update = (boardId: string, id: string, newTask: Task) => tasksRepo.update(boardId, id, newTask);
+const update = (id: string, data: Task) => taskRepo.update(id, new Task(data, undefined));
 
-const remove = (boardId: string, id: string) => tasksRepo.remove(boardId, id);
+const remove = (id: string) => taskRepo.remove(id);
 
-export default {
-    getAll,
-    getById,
-    create,
-    update,
-    remove
-};
+export default { getAll, getById, create, update, remove };

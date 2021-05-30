@@ -1,4 +1,4 @@
-import {v4 as uuid4} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 export interface ITask {
   id: string;
@@ -6,11 +6,11 @@ export interface ITask {
   order: number;
   description: string;
   userId: string | null;
-  boardId: string | null ;
+  boardId: string | null | undefined;
   columnId: string;
 }
-class Task implements ITask {
 
+class Task implements ITask {
   id: string;
 
   title: string;
@@ -21,29 +21,39 @@ class Task implements ITask {
 
   userId: string | null;
 
-  boardId: string | null;
+  boardId: string | undefined | null;
 
   columnId: string;
-  
-  constructor({
-    id = uuid4(),
-    title = 'New task',
-    order = 1,
-    description = 'description',
-    userId = '',
-    boardId = '',
-    columnId = ''
-  } = {}) {
+
+  constructor(
+    {
+      id = uuid(),
+      title = 'Task',
+      order = 0,
+      description = 'description',
+      userId = `userId`,
+      boardId = `boardId`,
+      columnId = `columnId`
+    } = {} as ITask,
+    boardIdFromParams?: string | undefined | null
+  ) {
+
     this.id = id;
     this.title = title;
+
     this.order = order;
+
     this.description = description;
+
     this.userId = userId;
-    this.boardId = boardId;
+
+    if (boardId) this.boardId = boardId
+    else if (boardIdFromParams) this.boardId = boardIdFromParams;
+
     this.columnId = columnId;
   }
 
-  static toResponse(task: Task | null) {
+  static toResponse(task: Task) {
     return task;
   }
 }

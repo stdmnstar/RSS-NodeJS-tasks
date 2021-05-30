@@ -1,16 +1,27 @@
-const { v4: uuid4 } = require('uuid');
+import {v4 as uuid4} from 'uuid';
 
-class Board {
+interface IBoard {
+  id: string;
+  title: string;
+  columns: object[];
+}
+class Board implements IBoard {
   
-  constructor({ id = uuid4(), title = 'New board', columns = [] } = {}) {
+  id: string;
+
+  title: string;
+
+  columns: object[];
+
+  constructor({ id = uuid4(), title = 'New board', columns = [] } = {} as IBoard) {
     this.id = id;
     this.title = title;
     this.columns = [...columns];
   }
 
-  static toResponse({ id, title, columns }) {
-    return { id, title, columns };
+  static toResponse(board: Board) {
+    return board;
   }
 }
 
-module.exports = Board;
+export default Board;

@@ -1,8 +1,9 @@
-const DB = require('../../common/inMemoryDB');
+import DB from '../../common/inMemoryDB';
+import Board from './board.model';
 
 const getAll = async () => DB.getAllBoards();
 
-const getById = async id => {
+const getById = async (id: string) => {
   const board = DB.getBoardById(id);
   if (!board) {
     throw new Error(`Board id=${id} was not found`);
@@ -10,7 +11,7 @@ const getById = async id => {
   return board;
 };
 
-const update = async (id, newBoard) => {
+const update = async (id: string, newBoard: Board) => {
   const board = DB.updateBoard(id, newBoard);
   if (!board) {
     throw new Error(`Board id=${id} was not found`);
@@ -18,9 +19,9 @@ const update = async (id, newBoard) => {
   return board;
 };
 
-const create = async board => DB.createBoard(board);
+const create = async (board: Board) => DB.createBoard(board);
 
-const remove = async id => {
+const remove = async (id: string) => {
   const board = DB.getBoardById(id);
   if (!board) {
     throw new Error(`Board id=${id} was not found`);
@@ -28,7 +29,7 @@ const remove = async id => {
   DB.deleteBoard(id);
 };
 
-module.exports = {
+export default {
   getAll,
   getById,
   create,

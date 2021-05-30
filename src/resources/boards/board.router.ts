@@ -1,8 +1,15 @@
-const router = require('express').Router();
-const Board = require('./board.model');
-const boardService = require('./board.service');
+// const router = require('express').Router();
+// const Board = require('./board.model');
+// const boardService = require('./board.service');
 
-router.route('/').get(async (req, res) => {
+import { Request, Response, Router } from 'express';
+import boardService from './board.service';
+import Board from './board.model';
+
+const router = Router();
+
+
+router.route('/').get(async (_req:Request, res:Response) => {
   try {
     const boards = await boardService.getAll();
     res.json(boards.map(Board.toResponse));

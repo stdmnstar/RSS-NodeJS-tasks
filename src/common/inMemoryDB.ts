@@ -97,7 +97,7 @@ const deleteTask = async id => {
   inMemoryTasks = inMemoryTasks.filter((el) => el.id !== id);
 };
 
-module.exports = {
+export default {
   getAllUsers,
   getAllBoards,
   getAlltasksForBoardId,

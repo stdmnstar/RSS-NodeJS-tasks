@@ -1,6 +1,7 @@
 import { createLogger, format, transports } from 'winston';
 
 const logFile = './logs/log.log';
+const errorFile = './logs/error.log';
 
 const logger = createLogger({
   exitOnError: false,
@@ -15,7 +16,16 @@ const logger = createLogger({
       level: 'info',
       format: format.json(),
     }),
+    new transports.File({
+      filename: errorFile,
+      level: 'error',
+      format: format.json(),
+    }),
   ],
 });
 
-export { logger };
+const errorLoger = (error: Error, url: string, method: string, statusCode: number): void => {
+  logger.error(`Error: ${method} - ${error.message} - ${url} - ${statusCode}`);
+};
+
+export { logger, errorLoger };

@@ -1,11 +1,11 @@
 
 import moment from 'moment';
 import { finished } from 'stream';
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { logger } from '../logger/logger';
 
 
-const httpLogger = (req: Request, res: Response, next: NextFunction): void => {
+const httpLoggerMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const { method, originalUrl, body, query } = req;
   const start = Date.now();
 
@@ -24,4 +24,4 @@ const httpLogger = (req: Request, res: Response, next: NextFunction): void => {
   });
 };
 
-export { httpLogger };
+export { httpLoggerMiddleware };

@@ -1,9 +1,7 @@
-
 import moment from 'moment';
 import { finished } from 'stream';
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../logger/logger';
-
 
 const httpLoggerMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const { method, originalUrl, body, query } = req;

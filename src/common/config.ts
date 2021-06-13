@@ -15,4 +15,5 @@ export default {
   POSTGRES_DB: process.env['POSTGRES_DB'],
   JWT_SECRET_KEY: process.env['JWT_SECRET_KEY'],
   AUTH_MODE: process.env['AUTH_MODE'] === 'true',
+  TIME_ZONE: process.env['TIME_ZONE'],
 };

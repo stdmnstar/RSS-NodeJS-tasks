@@ -29,6 +29,10 @@ const errorLoger = (error: Error, url: string, method: string, statusCode: numbe
   logger.error(`Error: ${method} - ${error.message} - ${url} - ${statusCode}`);
 };
 
+const errorLogerSimp = (error: Error, message: string): void => {
+  logger.error(`Error: ${message} - ${error.message}`);
+};
+
 const errorLogerUnhandledRejection = (reason: Error, promise: Promise<void>): void => {
   logger.error(`Unhandled Rejection at:, ${JSON.stringify(promise)}, reason:, ${reason.message} \n`);
 };
@@ -38,4 +42,4 @@ const errorLogerSync = (error: string): void => {
   appendFileSync(logFile, error);
 };
 
-export { logger, errorLoger, errorLogerSync, errorLogerUnhandledRejection };
+export { logger, errorLoger, errorLogerSimp,errorLogerSync, errorLogerUnhandledRejection };

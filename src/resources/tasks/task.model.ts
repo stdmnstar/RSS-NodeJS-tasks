@@ -31,9 +31,9 @@ class Task implements ITask {
       title = 'Task',
       order = 0,
       description = 'description',
-      userId = `userId`,
-      boardId = `boardId`,
-      columnId = `columnId`
+      userId = 'userId',
+      boardId = 'boardId',
+      columnId = 'columnId'
     } = {} as ITask,
     boardIdFromParams?: string | null | undefined
   ) {

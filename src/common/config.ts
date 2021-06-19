@@ -16,4 +16,5 @@ export default {
   JWT_SECRET_KEY: process.env['JWT_SECRET_KEY'],
   AUTH_MODE: process.env['AUTH_MODE'] === 'true',
   TIME_ZONE: process.env['TIME_ZONE'],
+  DB_HOST: process.env['DB_HOST'],
 };

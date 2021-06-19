@@ -2,3 +2,4 @@ node_modules
 jsdoc
 build
 logs
+pgdata

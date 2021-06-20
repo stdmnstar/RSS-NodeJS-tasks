@@ -40,7 +40,7 @@ router.route('/:userId').put(async (req: Request, res: Response) => {
   }
 });
 
-router.route('/:id').delete(async (req: Request, res: Response) => {
+router.route('/:userId').delete(async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const removed = await userService.remove(userId!);

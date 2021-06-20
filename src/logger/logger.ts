@@ -42,4 +42,4 @@ const errorLogerSync = (error: string): void => {
   appendFileSync(logFile, error);
 };
 
-export { logger, errorLoger, errorLogerSimp,errorLogerSync, errorLogerUnhandledRejection };
+export { logger, errorLoger, errorLogerSimp, errorLogerSync, errorLogerUnhandledRejection };

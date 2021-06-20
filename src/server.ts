@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import { initializeDB } from './db';
 import { errorLogerSimp } from './logger/logger';
 import { PORT } from './common/config';
-import app from './app';
+
 
 (async () => {
   try {
@@ -12,8 +12,8 @@ import app from './app';
     errorLogerSimp(err, 'Failed to connect to DB!')
 
   }
-
-app.listen(PORT, () =>
+  const app = await import('./app')
+app.default.listen(PORT, () =>
   console.log(`App is running on http://localhost:${PORT}`)
 );
 })();

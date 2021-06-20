@@ -12,9 +12,9 @@ import app from './app';
     errorLogerSimp(err, 'Failed to connect to DB!')
 
   }
-})();
 
 app.listen(PORT, () =>
   console.log(`App is running on http://localhost:${PORT}`)
 );
+})();
 

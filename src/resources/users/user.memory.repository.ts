@@ -1,47 +1,24 @@
-import DB from '../../common/inMemoryDB';
-import User from './user.model';
+import { getConnection } from '../../db';
+import User, { IUser } from './user.model';
 
-const getAll = async () => DB.Users.map(User.toResponse);
+const repository = getConnection()!.getRepository(User);
 
-const getById = async (id: string) => {
-  const user = await DB.Users.filter(el => el.id === id)[0];
+const getAll = async () => repository.find()
 
-  if (!user) throw new Error('User not found');
+const getById = async (userId: string) => repository.findOne(userId)
 
-  return User.toResponse(user);
-};
+const create = async (user: IUser) => repository.save(user)
 
-const create = async (data: User) => {
-  await DB.Users.push(data);
-  return User.toResponse(data);
-};
+const update = async (userId: string, data: Partial<IUser>) => {
+  await repository.update(userId, data)
+  const user = await getById(userId)
+  return user!
+}
 
-const update = async (id: string, data: object) => {
-  DB.Users = await DB.Users.map((el: User) => {
-    if (el.id === id) {
-      return { ...el, ...data }
-    }
-    return el
-  })
-
-  return getById(id);
-};
-
-const remove = async (id: string) => {
-  DB.Tasks = await DB.Tasks.map((el) =>
-    el.userId === id ? { ...el, userId: null } : el
-  );
-
-  const removeUser = await getById(id);
-
-  await DB.Users.forEach((el: User, i) => {
-    if (el.id === id) {
-      DB.Users.splice(i, 1);
-    }
-  })
-
-  return removeUser;
-};
+const remove = async (userId: string) => {
+  const res = await repository.delete(userId)
+  return !!res.affected
+}
 
 export default {
   getAll,

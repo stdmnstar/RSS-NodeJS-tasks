@@ -1,11 +1,13 @@
 import { Request, Response, Router } from 'express';
 import taskService from './task.service';
+import Task from './task.model';
 
 const router = Router({ mergeParams: true });
 
-router.route('/').get(async (_req: Request, res: Response) => {
+router.route('/').get(async (req: Request, res: Response) => {
   try {
-    const tasks = await taskService.getAll();
+    const { boardId } = req.params;
+    const tasks = await taskService.getAll(boardId!);
     res.json(tasks);
 
   } catch (error) {
@@ -13,42 +15,36 @@ router.route('/').get(async (_req: Request, res: Response) => {
   }
 });
 
-router.route('/:id').get(async (req: Request, res: Response) => {
+router.route('/:taskId').get(async (req: Request, res: Response) => {
   try {
-    const ID = req.params['id'];
-
-    if (typeof ID === 'string') {
-      const task = await taskService.getById(ID);
-      res.status(200).json(task);
+    const { taskId, boardId } = req.params;
+    const task = await taskService.getById(boardId!, taskId!);
+    if (task) {
+      res.json(task);
     }
+    res.status(404).json();
 
   } catch ({ message }) {
     res.status(404).send(message);
   }
 });
 
-router.route('/:id').put(async (req: Request, res: Response) => {
+router.route('/:taskId').put(async (req: Request, res: Response) => {
   try {
-    const ID = req.params['id'];
-
-    if (typeof ID === 'string') {
-      const task = await taskService.update(ID, req.body);
-      res.status(200).json(task);
-    }
+    const { taskId, boardId } = req.params;
+    const task = await taskService.update(boardId!, taskId!, req.body);
+    res.json(task);
 
   } catch ({ message }) {
     res.status(400).send(message);
   }
 });
 
-router.route('/:id').delete(async (req: Request, res: Response) => {
+router.route('/:taskId').delete(async (req: Request, res: Response) => {
   try {
-    const ID = req.params['id'];
-
-    if (typeof ID === 'string') {
-      await taskService.remove(ID);
-      res.sendStatus(200);
-    }
+    const { taskId } = req.params;
+    const removed = await taskService.remove(taskId!);
+    res.status(removed ? 204 : 404).json();
 
   } catch ({ message }) {
     res.status(404).send(message);
@@ -57,12 +53,9 @@ router.route('/:id').delete(async (req: Request, res: Response) => {
 
 router.route('/').post(async (req: Request, res: Response) => {
   try {
-    const boardID = req.params['boardId'];
-
-    if (typeof boardID === 'string') {
-      const task = await taskService.create(req.body, boardID);
-      res.status(201).json(task);
-    }
+    const { boardId } = req.params;
+    const task = await taskService.create(new Task(boardId!, req.body));
+    res.status(201).json(task);
 
   } catch ({ message }) {
     res.status(400).send(message);

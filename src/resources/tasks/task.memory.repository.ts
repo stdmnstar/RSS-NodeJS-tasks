@@ -1,44 +1,25 @@
-import DB from '../../common/inMemoryDB';
-import Task from './task.model';
+import { getConnection } from '../../db';
+import Task, { ITask } from './task.model';
 
-const getAll = async () => DB.Tasks.map(Task.toResponse);
+const repository = getConnection()!.getRepository(Task);
 
-const getById = async (id: string) => {
-  const task = await DB.Tasks.filter(el => el.id === id)[0];
+const getAll = async (boardId: string): Promise<ITask[]> => repository.find({ where: { boardId } })
 
-  if (!task) throw new Error(`Task id=${id} was not found`);
+const getById = async (boardId: string, taskId: string): Promise<ITask | undefined> => repository.findOne(taskId, { where: { boardId } })
 
-  return Task.toResponse(task);
-};
+const create = async (item: ITask): Promise<ITask> => repository.save(item)
 
-const create = async (data: Task) => {
-  await DB.Tasks.push(data);
+const update = async (boardId: string, taskId: string, data: Partial<ITask>): Promise<ITask> => {
+  await repository.update(taskId, data)
+  const task = await getById(boardId, taskId)
+  return task!
+}
 
-  return Task.toResponse(data);
-};
+ const remove = async (taskId: string): Promise<boolean> => {
+  const res = await repository.delete(taskId)
+  return !!res.affected
+}
 
-const update = async (id: string, data: object) => {
-  DB.Tasks = await DB.Tasks.map((el: Task) => {
-    if (el.id === id) {
-      return { ...el, ...data }
-    }
-    return el
-  })
-
-  return getById(id);
-};
-
-const remove = async (id: string) => {
-  const removeTask = await getById(id);
-
-  await DB.Tasks.forEach((el: Task, i) => {
-    if (el.id === id) {
-      DB.Tasks.splice(i, 1);
-    }
-  })
-
-  return removeTask;
-};
 
 export default {
   getAll,

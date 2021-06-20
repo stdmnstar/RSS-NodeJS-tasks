@@ -1,61 +1,70 @@
-import { v4 as uuid4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import User from '../users/user.model';
+import Board from '../boards/board.model';
+import BoardColumn from '../columns/column.model';
 
 export interface ITask {
   id: string;
   title: string;
   order: number;
   description: string;
+  boardId: string;
+  columnId: string | null;
   userId: string | null;
-  boardId: string | null | undefined;
-  columnId: string;
-};
+}
 
+@Entity()
 class Task implements ITask {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ length: 255 })
   title: string;
 
+  @Column('integer')
   order: number;
 
+  @Column({ length: 255 })
   description: string;
 
+  @ManyToOne(() => Board, { onDelete: 'CASCADE' })
+  board!: Board;
+
+  @Column()
+  boardId: string;
+
+  @ManyToOne(() => BoardColumn, { onDelete: 'SET NULL' })
+  column!: BoardColumn;
+
+  @Column({ nullable: true })
+  columnId: string | null;
+
+  @ManyToOne(() => User, { onDelete: 'SET NULL' })
+  user!: User;
+
+  @Column({ nullable: true })
   userId: string | null;
 
-  boardId: string | null | undefined;
-
-  columnId: string;
-
   constructor(
+    boardId: string,
     {
-      id = uuid4(),
-      title = 'Task',
+      id = uuid(),
+      title = '',
       order = 0,
-      description = 'description',
-      userId = 'userId',
-      boardId = 'boardId',
-      columnId = 'columnId'
-    } = {} as ITask,
-    boardIdFromParams?: string | null | undefined
+      description = '',
+      columnId = null,
+      userId = null,
+    }: Partial<ITask> = {}
   ) {
-
     this.id = id;
     this.title = title;
-
     this.order = order;
-
     this.description = description;
-
-    this.userId = userId;
-
-    if (boardId) this.boardId = boardId
-    else if (boardIdFromParams) this.boardId = boardIdFromParams;
-
+    this.boardId = boardId;
     this.columnId = columnId;
+    this.userId = userId;
   }
-
-  static toResponse(task: Task) {
-    return task;
-  }
-};
+}
 
 export default Task;

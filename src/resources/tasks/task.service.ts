@@ -1,14 +1,15 @@
 import taskRepo from './task.memory.repository';
-import Task from './task.model';
+import { ITask } from './task.model';
 
-const getAll = () => taskRepo.getAll();
+const getAll = (boardId: string): Promise<ITask[]> => taskRepo.getAll(boardId);
 
-const getById = (id: string) => taskRepo.getById(id);
+const getById = (boardId: string, taskId: string): Promise<ITask | undefined> => taskRepo.getById(boardId, taskId);
 
-const create = (data: Task, boardIdFromParams: string) => taskRepo.create(new Task(data, boardIdFromParams));
+const create = (task: ITask): Promise<ITask> => taskRepo.create(task);
 
-const update = (id: string, data: Task) => taskRepo.update(id, new Task(data));
+const update = (boardId: string, taskId: string, data: Partial<ITask>): Promise<ITask> =>
+    taskRepo.update(boardId, taskId, data);
 
-const remove = (id: string) => taskRepo.remove(id);
+const remove = (taskId: string): Promise<boolean> => taskRepo.remove(taskId);
 
 export default { getAll, getById, create, update, remove };

@@ -1,33 +1,36 @@
-import { v4 as uuid4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+// eslint-disable-next-line import/no-cycle
+import BoardColumn, { IColumn } from '../columns/column.model';
 
 export interface IBoard {
   id: string;
   title: string;
-  columns: object[];
-};
-
+  columns: IColumn[];
+}
+@Entity()
 class Board implements IBoard {
-
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ length: 255 })
   title: string;
 
-  columns: object[];
+  @OneToMany(
+    () => BoardColumn,
+    column => column.board,
+    { onDelete: 'CASCADE', cascade: true, eager: true }
+  )
+  columns!: IColumn[];
 
-  constructor({
-    id = uuid4(),
-    title = 'boardTemplate',
-    columns = [],
-  } = {} as IBoard) {
-
+  constructor({ id = uuid(), title = '', columns }: Partial<IBoard> = {}) {
     this.id = id;
     this.title = title;
-    this.columns = columns;
-  }
 
-  static toResponse(board: Board) {
-    return board;
+    if (columns) {
+      this.columns = columns
+    }
   }
-};
+}
 
 export default Board;

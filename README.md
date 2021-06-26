@@ -22,6 +22,7 @@ git clone {repository URL}
 ```
 docker compose up
 ```
+
 # 2. Start without Docker
 ## Downloading
 

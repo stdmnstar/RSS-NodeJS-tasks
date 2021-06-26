@@ -8,10 +8,11 @@
   "type": "commonjs",
   "description": "REST service starter for RS School",
   "main": "src/server.ts",
-  "scripts": {    
+  "scripts": {
     "dev": "cross-env nodemon --exitcrash",
     "dev1": "ts-node-dev ./src/server.ts",
     "start": "cross-env ts-node src/server.ts",
+    "start1": "cross-env NODE_PATH=./src tsnd --respawn src/server.ts",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint --ext .js,.ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
@@ -54,8 +55,11 @@
     "express": "4.17.1",
     "jsdoc": "^3.6.7",
     "moment": "^2.29.1",
+    "pg": "^8.6.0",
+    "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "4.1.6",
     "ts-node": "^10.0.0",
+    "typeorm": "^0.2.34",
     "uuid": "8.3.2",
     "winston": "^3.3.3",
     "yamljs": "0.3.0"

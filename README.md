@@ -1,5 +1,4 @@
 # RS School REST service
-
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
